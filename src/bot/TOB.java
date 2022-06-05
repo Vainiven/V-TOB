@@ -103,9 +103,7 @@ public class TOB extends VScript implements GUISettingsProvider {
 		if (!gui.isVisible()) {
 			if (currentBoss == null) {
 				if (players.isAtTOB()) {
-					if (!bank.bank(inventoryLoadout, loadouts.get(Loadouts.MELEE))
-							&& !bank.withdraw(loadouts.get(Loadouts.RANGED))
-							&& !bank.withdraw(loadouts.get(Loadouts.MAGIC))) {
+					if (!bank.withdraw(loadouts.get(Loadouts.RANGED)) && !bank.withdraw(loadouts.get(Loadouts.MAGIC)) && !bank.bank(inventoryLoadout, loadouts.get(Loadouts.MELEE))) {
 						if (players.inParty("ToB Party (")) {
 							if (players.getPartyLeaderName() && players.isOtherPartyMemberCloseToB()) {
 								players.handleToBPartyDialogue();
