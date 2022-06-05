@@ -102,21 +102,23 @@ public class TOB extends VScript implements GUISettingsProvider {
 	public void onProcess() {
 		if (!gui.isVisible()) {
 			if (currentBoss == null) {
-				if (players.isAtTOB()) {
-					if (!bank.withdraw(loadouts.get(Loadouts.RANGED)) && !bank.withdraw(loadouts.get(Loadouts.MAGIC)) && !bank.bank(inventoryLoadout, loadouts.get(Loadouts.MELEE))) {
-						if (players.inParty("ToB Party (")) {
-							if (players.getPartyLeaderName() && players.isOtherPartyMemberCloseToB()) {
-								players.handleToBPartyDialogue();
-							}
-						} else {
-							players.createParty();
+//				if (players.isAtTOB()) {
+				if (!players.useHealingBox() && !bank.bank(inventoryLoadout, loadouts.get(Loadouts.MELEE), false)
+						&& !bank.withdraw(loadouts.get(Loadouts.RANGED))
+						&& !bank.withdraw(loadouts.get(Loadouts.MAGIC))) {
+					if (ctx.bank.bankOpen()) {
+						ctx.bank.closeBank();
+					} else if (players.inParty("ToB Party (")) {
+						if (players.getPartyLeaderName()) {
+							players.handleToBPartyDialogue();
 						}
+					} else {
+						players.createParty();
 					}
-				} else {
-					ctx.teleporter.teleportStringPath("Minigames", "Theatre of Blood");
 				}
+//				} else {
+//					ctx.teleporter.teleportStringPath("Minigames", "Theatre of Blood");
 			} else {
-
 				// Room fight
 				if (!ctx.npcs.populate().filter(currentBoss.getIds()).isEmpty()) {
 					prayers.usePrayers(currentBoss.getPrayers(), prayerLoadout, false);
@@ -130,10 +132,8 @@ public class TOB extends VScript implements GUISettingsProvider {
 					currentBoss.getToNextRoom();
 					currentBoss = getBoss();
 				}
-
 			}
 		}
-
 	}
 
 	private TobBoss getBoss() {
