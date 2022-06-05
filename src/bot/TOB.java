@@ -1,6 +1,9 @@
 package bot;
 
+import java.awt.event.KeyEvent;
 import java.util.HashMap;
+
+import org.apache.commons.lang3.ArrayUtils;
 
 import Bot.VScript;
 import ClientContext.Players;
@@ -13,6 +16,7 @@ import Properties.ItemGroups;
 import Properties.Loadout;
 import Properties.PrayerGroups;
 import Properties.PrayerLoadout;
+import bosses.TheMaidenofSugadinti;
 import bosses.TobBoss;
 import paint.PaintProvider;
 import simple.api.actions.SimpleNpcActions;
@@ -38,7 +42,7 @@ public class TOB extends VScript implements GUISettingsProvider {
 			new InventoryChoice(ItemGroups.SPEC_WEAPONS, 1, 0));
 	private final HashMap<Loadouts, EquipmentLoadout> loadouts = new HashMap<>();
 	private final GUI gui;
-	private TobBoss[] bosses = {};
+	private TobBoss[] bosses = { new TheMaidenofSugadinti() };
 	private TobBoss currentBoss = getBoss();
 
 	public TOB() {
@@ -102,46 +106,75 @@ public class TOB extends VScript implements GUISettingsProvider {
 	public void onProcess() {
 		if (!gui.isVisible()) {
 			if (currentBoss == null) {
-//				if (players.isAtTOB()) {
-				if (!players.useHealingBox() && !bank.bank(inventoryLoadout, loadouts.get(Loadouts.MELEE), false)
-						&& !bank.withdraw(loadouts.get(Loadouts.RANGED))
-						&& !bank.withdraw(loadouts.get(Loadouts.MAGIC))) {
-					if (ctx.bank.bankOpen()) {
-						ctx.bank.closeBank();
-					} else if (players.inParty("ToB Party (")) {
-						if (players.getPartyLeaderName()) {
-							players.handleToBPartyDialogue();
+				if (players.isAtTOB()) {
+					if (!players.useHealingBox() && !bank.bank(inventoryLoadout, loadouts.get(Loadouts.MELEE), false)
+							&& !bank.withdraw(loadouts.get(Loadouts.RANGED))
+							&& !bank.withdraw(loadouts.get(Loadouts.MAGIC))) {
+						if (ctx.bank.bankOpen()) {
+							ctx.bank.closeBank();
+						} else if (players.inParty("ToB Party (")) {
+							if (players.getPartyLeaderName()) {
+								handleToBPartyDialogue();
+							}
+						} else {
+							players.createParty();
 						}
-					} else {
-						players.createParty();
 					}
+				} else {
+					ctx.teleporter.teleportStringPath("Minigames", "Theatre of Blood");
 				}
-//				} else {
-//					ctx.teleporter.teleportStringPath("Minigames", "Theatre of Blood");
 			} else {
 				// Room fight
 				if (!ctx.npcs.populate().filter(currentBoss.getIds()).isEmpty()) {
-					prayers.usePrayers(currentBoss.getPrayers(), prayerLoadout, false);
+					prayers.usePrayers(currentBoss.getPrayers().toArray(new PrayerGroups[0]), prayerLoadout, false);
 					inventory.dropEmptyVials();
 					inventory.usePotions();
 					inventory.eat();
 					if (!currentBoss.move() && !ctx.npcs.peekNext().equals(ctx.players.getLocal().getInteracting())) {
 						ctx.npcs.next().interact(SimpleNpcActions.ATTACK);
 					}
+				} else if (bossDead) {
+					if (!currentBoss.getToNextRoom()) {
+						nextBoss();
+					}
 				} else {
-					currentBoss.getToNextRoom();
-					currentBoss = getBoss();
+					currentBoss.goToBoss();
 				}
 			}
 		}
 	}
 
-	private TobBoss getBoss() {
-		for (TobBoss boss : bosses) {
-			if (players.inRegion(boss.getRegion())) {
-				return boss;
+	public void handleToBPartyDialogue() {
+		String widgetText = ctx.widgets.populate().filter(365).next().getText();
+		if (!ctx.dialogue.dialogueOpen() && !ctx.objects.populate().filter(32653).isEmpty()) {
+			ctx.objects.nearest().next().interact(502);
+			ctx.onCondition(() -> ctx.dialogue.dialogueOpen());
+		} else if (!ctx.widgets.populate().filter(2469).isEmpty()) {
+			ctx.menuActions.sendAction(679, 3634, 50, 367);
+			ctx.keyboard.clickKey(KeyEvent.VK_1);
+		} else if (!ctx.widgets.populate().filter(363).isEmpty()
+				&& (widgetText.contains("1/1") || widgetText.contains("2/2") || widgetText.contains("3/3")
+						|| widgetText.contains("4/4") || widgetText.contains("5/5"))) {
+			ctx.keyboard.clickKey(KeyEvent.VK_SPACE);
+		} else if (!ctx.widgets.populate().filter(2459).isEmpty()) {
+			ctx.keyboard.clickKey(KeyEvent.VK_1);
+			nextBoss();
+		} else {
+			ctx.sleep(1000);
+		}
+	}
+
+	private TobBoss nextBoss() {
+		if (currentBoss == null) {
+			currentBoss = bosses[0];
+		} else {
+			int index = ArrayUtils.indexOf(bosses, currentBoss);
+			if (index < bosses.length -1) {
+				currentBoss = bosses[ArrayUtils.indexOf(bosses, currentBoss) + 1];
+			} else {
+				currentBoss = null;
 			}
 		}
-		return null;
+		return currentBoss;
 	}
 }
