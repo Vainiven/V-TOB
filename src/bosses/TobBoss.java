@@ -7,12 +7,15 @@ import ClientContext.Players;
 import Properties.PrayerGroups;
 import bot.TOB.Loadouts;
 import simple.api.ClientContext;
+import simple.api.wrappers.SimpleNpc;
 
 public abstract class TobBoss {
-	
+
+	private static boolean dead;
 	Pathing pathing = new Pathing();
 	Players players = new Players();
 	ClientContext ctx = ClientContext.instance();
+	private SimpleNpc currentBoss;
 
 	public TobBoss(int[] ids, int region) {
 		this.ids = ids;
@@ -42,6 +45,7 @@ public abstract class TobBoss {
 	 * @return True if getting to next room. False if the next room has been reached
 	 */
 	public abstract boolean getToNextRoom();
+
 	/**
 	 * 
 	 * @return True if getting to next boss. False if the next boss has been reached
@@ -51,5 +55,25 @@ public abstract class TobBoss {
 	public abstract List<PrayerGroups> getPrayers();
 
 	public abstract Loadouts getLoadout();
+
+	public SimpleNpc getBoss() {
+		if (currentBoss == null) {
+			currentBoss = ctx.npcs.populate().filter(getIds()).filterHasAction("Attack").nearest().next();
+		} else if (currentBoss.isDead() || !ctx.npcs.populate().contains(currentBoss)) {
+			currentBoss = ctx.npcs.populate().filter(getIds()).filterHasAction("Attack").nearest().next();
+			if (currentBoss == null) {
+				dead = true;
+			}
+		}
+		return currentBoss;
+	}
+	
+	public static boolean isDead() {
+		if (dead) {
+			dead = false;
+			return true;
+		}
+		return false;
+	}
 
 }

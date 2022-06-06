@@ -43,7 +43,7 @@ public class TOB extends VScript implements GUISettingsProvider {
 	private final HashMap<Loadouts, EquipmentLoadout> loadouts = new HashMap<>();
 	private final GUI gui;
 	private TobBoss[] bosses = { new TheMaidenofSugadinti() };
-	private TobBoss currentBoss = getBoss();
+	private TobBoss currentBoss;
 
 	public TOB() {
 		super(null);
@@ -133,7 +133,7 @@ public class TOB extends VScript implements GUISettingsProvider {
 					if (!currentBoss.move() && !ctx.npcs.peekNext().equals(ctx.players.getLocal().getInteracting())) {
 						ctx.npcs.next().interact(SimpleNpcActions.ATTACK);
 					}
-				} else if (bossDead) {
+				} else if (TobBoss.isDead()) {
 					if (!currentBoss.getToNextRoom()) {
 						nextBoss();
 					}
