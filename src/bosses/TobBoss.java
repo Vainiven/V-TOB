@@ -11,13 +11,13 @@ import simple.api.wrappers.SimpleNpc;
 
 public abstract class TobBoss {
 
-	private static boolean dead;
+	private boolean dead;
 	Pathing pathing = new Pathing();
 	Players players = new Players();
 	ClientContext ctx = ClientContext.instance();
 	private SimpleNpc currentBoss;
 
-	public TobBoss(int[] ids, int region) {
+	public TobBoss(int[] ids, int... region) {
 		this.ids = ids;
 		this.region = region;
 	}
@@ -28,9 +28,9 @@ public abstract class TobBoss {
 		return ids;
 	}
 
-	private final int region;
+	private final int[] region;
 
-	public int getRegion() {
+	public int[] getRegions() {
 		return region;
 	}
 
@@ -68,12 +68,10 @@ public abstract class TobBoss {
 		return currentBoss;
 	}
 	
-	public static boolean isDead() {
-		if (dead) {
-			dead = false;
-			return true;
-		}
-		return false;
+	public boolean isDead() {
+		return dead;
 	}
+	
+	
 
 }

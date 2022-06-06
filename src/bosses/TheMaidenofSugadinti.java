@@ -1,5 +1,6 @@
 package bosses;
 
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,19 +12,35 @@ import simple.api.coords.WorldPoint;
 
 public class TheMaidenofSugadinti extends TobBoss {
 
+	WorldArea bossRegion = new WorldArea(new WorldPoint(3185, 4436, 0), new WorldPoint(3160, 4455, 0));
+
 	public TheMaidenofSugadinti() {
-		super(new int[] { 8360 }, 12869);
+		super(new int[] { 8360 }, 12869, 12613);
 	}
 
 	@Override
 	public boolean move() {
-		// TODO Auto-generated method stub
+		if (pathing.checkFreeTiles(1579)) {
+			return true;
+		}
 		return false;
 	}
 
 	@Override
 	public boolean getToNextRoom() {
-		// TODO Auto-generated method stub
+		WorldPoint[] path = { new WorldPoint(3190, 4446, 0), new WorldPoint(3191, 4440, 0),
+				new WorldPoint(3191, 4434, 0), new WorldPoint(3185, 4431, 0), new WorldPoint(3177, 4431, 0),
+				new WorldPoint(3176, 4424, 0) };
+
+		if (ctx.pathing.inArea(bossRegion) && !ctx.objects.populate().filter(32755).isEmpty()) {
+			ctx.objects.nearest().next().interact(SimpleObjectActions.FIRST);
+			ctx.onCondition(() -> ctx.dialogue.dialogueOpen());
+			ctx.keyboard.clickKey(KeyEvent.VK_1);
+		} else if (!ctx.objects.populate().filter("Formidable passage").isEmpty()) {
+			ctx.objects.nearest().next().interact(SimpleObjectActions.FIRST);
+		} else if (!ctx.pathing.inArea(bossRegion)) {
+			ctx.pathing.walkPath(path);
+		}
 		return false;
 	}
 
@@ -31,7 +48,7 @@ public class TheMaidenofSugadinti extends TobBoss {
 	public List<PrayerGroups> getPrayers() {
 		ArrayList<PrayerGroups> prayers = new ArrayList<>();
 		prayers.add(PrayerGroups.MELEE_PRAYER);
-		prayers.add(PrayerGroups.PROTECT_FROM_MELEE);
+		prayers.add(PrayerGroups.PROTECT_FROM_MAGIC);
 		return prayers;
 	}
 
@@ -43,18 +60,16 @@ public class TheMaidenofSugadinti extends TobBoss {
 	@Override
 	public boolean goToBoss() {
 		WorldPoint[] path = { new WorldPoint(3217, 4452, 0), new WorldPoint(3213, 4449, 0),
-				new WorldPoint(3208, 4446, 0), new WorldPoint(3202, 4446, 0), new WorldPoint(3197, 4446, 0) };
-
-		if (players.getRegionID() == 12869) {
+				new WorldPoint(3208, 4446, 0), new WorldPoint(3202, 4446, 0), new WorldPoint(3197, 4446, 0),
+				new WorldPoint(3193, 4446, 0), new WorldPoint(3189, 4446, 0) };
+		if (ctx.objects.populate().filter(32755).isEmpty() && !ctx.pathing.inArea(bossRegion)) {
 			ctx.pathing.walkPath(path);
-		} else if (players.getRegionID() == 12613 && (players.myPosition() != new WorldPoint(3186, 4446, 0))) {
-			pathing.stepTo(3186, 4446, 0);
-		} else if (!ctx.objects.populate().filter("Barrier").isEmpty()) {
+		} else if (!ctx.objects.populate().filter(32755).isEmpty() && !ctx.pathing.inArea(bossRegion)) {
 			ctx.objects.nearest().next().interact(SimpleObjectActions.FIRST);
-		} else if (!ctx.widgets.populate().filter(2459).isEmpty()) {
-			players.startTobBoss();
-		} else if (players.getRegionID() == 12613 && (players.myPosition() != new WorldPoint(3174, 4446, 0))) {
-			pathing.stepTo(3174, 4446, 0);
+			ctx.onCondition(() -> ctx.dialogue.dialogueOpen());
+			ctx.keyboard.clickKey(KeyEvent.VK_1);
+		} else if (ctx.npcs.populate().filter(getIds()).filterWithin(5).isEmpty()) {
+			pathing.stepTo(3170, 4446, 0);
 		}
 		return ctx.pathing.inArea(new WorldArea(new WorldPoint(3175, 4457, 0), new WorldPoint(3160, 4435, 0)));
 	}

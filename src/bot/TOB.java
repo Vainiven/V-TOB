@@ -43,7 +43,7 @@ public class TOB extends VScript implements GUISettingsProvider {
 	private final HashMap<Loadouts, EquipmentLoadout> loadouts = new HashMap<>();
 	private final GUI gui;
 	private TobBoss[] bosses = { new TheMaidenofSugadinti() };
-	private TobBoss currentBoss;
+	private TobBoss currentBoss = getCurrentRoom();
 
 	public TOB() {
 		super(null);
@@ -121,21 +121,22 @@ public class TOB extends VScript implements GUISettingsProvider {
 						}
 					}
 				} else {
-					ctx.teleporter.teleportStringPath("Minigames", "Theatre of Blood");
+					ctx.teleporter.teleportStringPath("Minigames", "Theatre of Blod");
 				}
 			} else {
 				// Room fight
-				if (!ctx.npcs.populate().filter(currentBoss.getIds()).isEmpty()) {
+				if (currentBoss.getBoss() != null) {
 					prayers.usePrayers(currentBoss.getPrayers().toArray(new PrayerGroups[0]), prayerLoadout, false);
 					inventory.dropEmptyVials();
 					inventory.usePotions();
 					inventory.eat();
 					if (!currentBoss.move() && !ctx.npcs.peekNext().equals(ctx.players.getLocal().getInteracting())) {
-						ctx.npcs.next().interact(SimpleNpcActions.ATTACK);
+						currentBoss.getBoss().interact(SimpleNpcActions.ATTACK);
 					}
-				} else if (TobBoss.isDead()) {
+				} else if (currentBoss.isDead()) {
 					if (!currentBoss.getToNextRoom()) {
-						nextBoss();
+						currentBoss = getCurrentRoom();
+					
 					}
 				} else {
 					currentBoss.goToBoss();
@@ -146,35 +147,31 @@ public class TOB extends VScript implements GUISettingsProvider {
 
 	public void handleToBPartyDialogue() {
 		String widgetText = ctx.widgets.populate().filter(365).next().getText();
+		int widgetId = ctx.widgets.getBackDialogId();
+
 		if (!ctx.dialogue.dialogueOpen() && !ctx.objects.populate().filter(32653).isEmpty()) {
 			ctx.objects.nearest().next().interact(502);
 			ctx.onCondition(() -> ctx.dialogue.dialogueOpen());
-		} else if (!ctx.widgets.populate().filter(2469).isEmpty()) {
+		} else if (widgetId == 2469) {
+			ctx.keyboard.clickKey(KeyEvent.VK_1);
+		} else if (widgetId == 363 && (widgetText.contains("1/1") || widgetText.contains("2/2")
+				|| widgetText.contains("3/3") || widgetText.contains("4/4") || widgetText.contains("5/5"))) {
 			ctx.menuActions.sendAction(679, 3634, 50, 367);
+		} else if (widgetId == 2459) {
 			ctx.keyboard.clickKey(KeyEvent.VK_1);
-		} else if (!ctx.widgets.populate().filter(363).isEmpty()
-				&& (widgetText.contains("1/1") || widgetText.contains("2/2") || widgetText.contains("3/3")
-						|| widgetText.contains("4/4") || widgetText.contains("5/5"))) {
-			ctx.keyboard.clickKey(KeyEvent.VK_SPACE);
-		} else if (!ctx.widgets.populate().filter(2459).isEmpty()) {
-			ctx.keyboard.clickKey(KeyEvent.VK_1);
-			nextBoss();
+			ctx.onCondition(() -> (currentBoss = getCurrentRoom()) != null, 250, 40);
 		} else {
 			ctx.sleep(1000);
 		}
 	}
 
-	private TobBoss nextBoss() {
-		if (currentBoss == null) {
-			currentBoss = bosses[0];
-		} else {
-			int index = ArrayUtils.indexOf(bosses, currentBoss);
-			if (index < bosses.length -1) {
-				currentBoss = bosses[ArrayUtils.indexOf(bosses, currentBoss) + 1];
-			} else {
-				currentBoss = null;
+	public TobBoss getCurrentRoom() {
+		for (TobBoss boss : bosses) {
+			if (players.inRegion(boss.getRegions())) {
+				return boss;
 			}
 		}
-		return currentBoss;
+		return null;
 	}
+
 }
