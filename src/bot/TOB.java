@@ -16,6 +16,7 @@ import Properties.ItemGroups;
 import Properties.Loadout;
 import Properties.PrayerGroups;
 import Properties.PrayerLoadout;
+import bosses.PestilentBloat;
 import bosses.TheMaidenofSugadinti;
 import bosses.TobBoss;
 import paint.PaintProvider;
@@ -42,7 +43,7 @@ public class TOB extends VScript implements GUISettingsProvider {
 			new InventoryChoice(ItemGroups.SPEC_WEAPONS, 1, 0));
 	private final HashMap<Loadouts, EquipmentLoadout> loadouts = new HashMap<>();
 	private final GUI gui;
-	private TobBoss[] bosses = { new TheMaidenofSugadinti() };
+	private TobBoss[] bosses = { new TheMaidenofSugadinti(), new PestilentBloat() };
 	private TobBoss currentBoss = getCurrentRoom();
 
 	public TOB() {
@@ -117,7 +118,7 @@ public class TOB extends VScript implements GUISettingsProvider {
 						}
 					}
 				} else {
-					ctx.teleporter.teleportStringPath("Minigames", "Theatre of Blod");
+					ctx.teleporter.teleportStringPath("Minigames", "Theatre of Blood");
 				}
 			} else {
 				// Room fight

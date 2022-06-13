@@ -23,7 +23,7 @@ public class PestilentBloat extends TobBoss {
 	WorldPoint southTile = new WorldPoint(3299, 4445, 0);
 	WorldPoint westTile = new WorldPoint(3293, 4444, 0);
 
-	public PestilentBloat(int[] ids, int[] region) {
+	public PestilentBloat() {
 		super(new int[] { 8359 }, 13125);
 	}
 
