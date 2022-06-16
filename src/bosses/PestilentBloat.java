@@ -1,6 +1,7 @@
 package bosses;
 
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 import Properties.PrayerGroups;
@@ -29,7 +30,7 @@ public class PestilentBloat extends TobBoss {
 
 	@Override
 	public boolean move() {
-		if (ctx.npcs.populate().filter(getBoss()).next().getAnimation() != 8082) {
+		if (ctx.npcs.populate().filter(getBoss()).next().getAnimation() != 8082 && goToBoss()) {
 			WorldPoint bossLocation = ctx.npcs.populate().filter(getIds()).next().getLocation();
 			if (bossLocation.within(northRegion)) {
 				ctx.pathing.step(northTile);
@@ -86,7 +87,9 @@ public class PestilentBloat extends TobBoss {
 
 	@Override
 	public List<PrayerGroups> getPrayers() {
-		return null;
+		ArrayList<PrayerGroups> prayers = new ArrayList<>();
+		prayers.add(PrayerGroups.MELEE_PRAYER);
+		return prayers;
 	}
 
 	@Override

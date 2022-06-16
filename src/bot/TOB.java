@@ -127,8 +127,10 @@ public class TOB extends VScript implements GUISettingsProvider {
 					inventory.dropEmptyVials();
 					inventory.usePotions();
 					inventory.eat();
+					System.out.println(ctx.npcs.peekNext().equals(ctx.players.getLocal().getInteracting()));
+					System.out.println(currentBoss.move());
 					if (!currentBoss.move() && !ctx.npcs.peekNext().equals(ctx.players.getLocal().getInteracting())) {
-						currentBoss.getBoss().interact(SimpleNpcActions.ATTACK);
+						currentBoss.getBoss().interact(SimpleNpcActions.FIRST);
 					}
 				} else if (currentBoss.isDead()) {
 					if (!currentBoss.getToNextRoom()) {
