@@ -21,14 +21,16 @@ import bosses.TheMaidenofSugadinti;
 import bosses.TobBoss;
 import paint.PaintProvider;
 import simple.api.actions.SimpleNpcActions;
+import simple.api.actions.SimpleObjectActions;
 import simple.api.script.Category;
+import simple.api.script.LoopingScript;
 import simple.api.script.ScriptManifest;
 import simple.api.wrappers.SimpleNpc;
 
 @ScriptManifest(author = "Vainiven & FVZ", category = Category.MONEYMAKING, description = "Dikke lul drie bier script", discord = "Vainven#6986", name = "V-TOB", servers = {
 		"Xeros" }, version = "0.1")
 
-public class TOB extends VScript implements GUISettingsProvider {
+public class TOB extends VScript implements GUISettingsProvider, LoopingScript {
 
 	public enum Loadouts {
 		MELEE, RANGED, MAGIC
@@ -108,7 +110,8 @@ public class TOB extends VScript implements GUISettingsProvider {
 		if (!gui.isVisible()) {
 			if (currentBoss == null) {
 				if (players.isAtTOB()) {
-					if (!players.useHealingBox() && !bank.bank(inventoryLoadout, loadouts.get(Loadouts.MELEE),loadouts.get(Loadouts.RANGED),loadouts.get(Loadouts.MAGIC))) {
+					if (!players.useHealingBox() && !bank.bank(inventoryLoadout, loadouts.get(Loadouts.MELEE),
+							loadouts.get(Loadouts.RANGED), loadouts.get(Loadouts.MAGIC))) {
 						if (players.inParty("ToB Party (")) {
 							if (players.getPartyLeaderName()) {
 								handleToBPartyDialogue();
@@ -127,15 +130,16 @@ public class TOB extends VScript implements GUISettingsProvider {
 					inventory.dropEmptyVials();
 					inventory.usePotions();
 					inventory.eat();
-					System.out.println(ctx.npcs.peekNext().equals(ctx.players.getLocal().getInteracting()));
-					System.out.println(currentBoss.move());
-					if (!currentBoss.move() && !ctx.npcs.peekNext().equals(ctx.players.getLocal().getInteracting())) {
+					if (!currentBoss.move() && !currentBoss.getBoss().equals(ctx.players.getLocal().getInteracting())) {
 						currentBoss.getBoss().interact(SimpleNpcActions.FIRST);
 					}
+
+					// When boss is dead
 				} else if (currentBoss.isDead()) {
 					if (!currentBoss.getToNextRoom()) {
+						prayers.disablePrayers(currentBoss.getPrayers().toArray(new PrayerGroups[0]), prayerLoadout,
+								false);
 						currentBoss = getCurrentRoom();
-					
 					}
 				} else {
 					currentBoss.goToBoss();
@@ -171,6 +175,17 @@ public class TOB extends VScript implements GUISettingsProvider {
 			}
 		}
 		return null;
+	}
+
+	public void handleBarrier() {
+		ctx.objects.nearest().next().interact(SimpleObjectActions.FIRST);
+		ctx.onCondition(() -> ctx.dialogue.dialogueOpen());
+		ctx.keyboard.clickKey(KeyEvent.VK_1);
+	}
+
+	@Override
+	public int loopDuration() {
+		return 200;
 	}
 
 }

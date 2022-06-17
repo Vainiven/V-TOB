@@ -5,12 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Properties.PrayerGroups;
+import bot.TOB;
 import bot.TOB.Loadouts;
 import simple.api.actions.SimpleObjectActions;
 import simple.api.coords.WorldArea;
 import simple.api.coords.WorldPoint;
 
 public class TheMaidenofSugadinti extends TobBoss {
+	
+	TOB tob = new TOB();
 
 	WorldArea bossRegion = new WorldArea(new WorldPoint(3185, 4436, 0), new WorldPoint(3160, 4455, 0));
 
@@ -18,6 +21,8 @@ public class TheMaidenofSugadinti extends TobBoss {
 		super(new int[] { 8360 }, 12869, 12613);
 	}
 
+	//TODO ADD STEP TO CLOSEST TILE TO BOSS
+	
 	@Override
 	public boolean move() {
 		if (pathing.checkFreeTiles(1579)) {
@@ -65,9 +70,7 @@ public class TheMaidenofSugadinti extends TobBoss {
 		if (ctx.objects.populate().filter(32755).isEmpty() && !ctx.pathing.inArea(bossRegion)) {
 			ctx.pathing.walkPath(path);
 		} else if (!ctx.objects.populate().filter(32755).isEmpty() && !ctx.pathing.inArea(bossRegion)) {
-			ctx.objects.nearest().next().interact(SimpleObjectActions.FIRST);
-			ctx.onCondition(() -> ctx.dialogue.dialogueOpen());
-			ctx.keyboard.clickKey(KeyEvent.VK_1);
+			tob.handleBarrier();
 		} else if (ctx.npcs.populate().filter(getIds()).filterWithin(5).isEmpty()) {
 			pathing.stepTo(3170, 4446, 0);
 		}

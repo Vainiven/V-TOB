@@ -5,14 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Properties.PrayerGroups;
+import bot.TOB;
 import bot.TOB.Loadouts;
 import simple.api.actions.SimpleObjectActions;
 import simple.api.coords.WorldArea;
 import simple.api.coords.WorldPoint;
 
 public class PestilentBloat extends TobBoss {
-	
-	WorldArea bossRegion = new WorldArea(new WorldPoint(3288, 4455, 0), new WorldPoint(3303, 4440, 0));
+
+	WorldArea bossRegion = new WorldArea(new WorldPoint(3288, 4455, 0), new WorldPoint(3304, 4440, 0));
 
 	WorldArea northRegion = new WorldArea(new WorldPoint(3292, 4451, 0), new WorldPoint(3299, 4455, 0));
 	WorldArea eastRegion = new WorldArea(new WorldPoint(3298, 4444, 0), new WorldPoint(3303, 4451, 0));
@@ -24,14 +25,21 @@ public class PestilentBloat extends TobBoss {
 	WorldPoint southTile = new WorldPoint(3299, 4445, 0);
 	WorldPoint westTile = new WorldPoint(3293, 4444, 0);
 
+	long startTime = System.currentTimeMillis();
+	long elapsedTime = System.currentTimeMillis() - startTime;
+	long elapsedSeconds = elapsedTime / 1000;
+
+	boolean goToSafeSpots;
+
 	public PestilentBloat() {
 		super(new int[] { 8359 }, 13125);
 	}
 
 	@Override
 	public boolean move() {
-		if (ctx.npcs.populate().filter(getBoss()).next().getAnimation() != 8082 && goToBoss()) {
+		if (ctx.npcs.populate().filter(getBoss()).next().getAnimation() != 8082 && goToBoss() || goToSafeSpots) {
 			WorldPoint bossLocation = ctx.npcs.populate().filter(getIds()).next().getLocation();
+			elapsedTime = 0;
 			if (bossLocation.within(northRegion)) {
 				ctx.pathing.step(northTile);
 			} else if (bossLocation.within(eastRegion)) {
@@ -42,32 +50,26 @@ public class PestilentBloat extends TobBoss {
 				ctx.pathing.step(southTile);
 			}
 			return true;
-		} else {
+		} else if (elapsedSeconds < 11) {
+			System.out.println("Current elapsedSeconds = " + elapsedSeconds);
 			return false;
+		} else {
+			goToSafeSpots = true;
 		}
+		return false;
 	}
 
 	@Override
 	public boolean getToNextRoom() {
 		WorldPoint secondBarrier = new WorldPoint(3288, 4447, 0);
-//		
-//		WorldPoint[] path = { new WorldPoint(3190, 4446, 0), new WorldPoint(3191, 4440, 0),
-//				new WorldPoint(3191, 4434, 0), new WorldPoint(3185, 4431, 0), new WorldPoint(3177, 4431, 0),
-//				new WorldPoint(3176, 4424, 0) };
-//
-//		if (ctx.pathing.inArea(bossRegion) && !ctx.objects.populate().filter(32755).isEmpty()) {
-//			ctx.objects.nearest().next().interact(SimpleObjectActions.FIRST);
-//			ctx.onCondition(() -> ctx.dialogue.dialogueOpen());
-//			ctx.keyboard.clickKey(KeyEvent.VK_1);
-//		} else if (!ctx.objects.populate().filter("Formidable passage").isEmpty()) {
-//			ctx.objects.nearest().next().interact(SimpleObjectActions.FIRST);
-//		} else if (!ctx.pathing.inArea(bossRegion)) {
-//			ctx.pathing.walkPath(path);
-//		}
-//		return false;
-//	}
-//		
-//		// TODO Auto-generated method stub
+		if (ctx.pathing.inArea(bossRegion) && !ctx.pathing.onTile(secondBarrier)) {
+			ctx.pathing.step(secondBarrier);
+		} else if (!ctx.objects.populate().filter(32755).isEmpty() && ctx.pathing.onTile(secondBarrier)) {
+			ctx.objects.nearest().next().interact(SimpleObjectActions.FIRST);
+			ctx.onCondition(() -> !ctx.pathing.inArea(bossRegion));
+		} else if (!ctx.objects.populate().filter("Formidable passage").isEmpty()) {
+			ctx.objects.nearest().next().interact(SimpleObjectActions.FIRST);
+		}
 		return false;
 	}
 
