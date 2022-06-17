@@ -1,6 +1,7 @@
 package bosses;
 
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 import Properties.PrayerGroups;
@@ -23,12 +24,10 @@ public class NycolasVasilias extends TobBoss {
 
 	public NycolasVasilias() {
 		super(new int[] { 8356, 8357, 8355 }, 13122);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public boolean move() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -53,8 +52,10 @@ public class NycolasVasilias extends TobBoss {
 
 	@Override
 	public List<PrayerGroups> getPrayers() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<PrayerGroups> prayers = new ArrayList<>();
+		prayers.add(PrayerGroups.MELEE_PRAYER);
+		return prayers;
+		//TODO ADD PRAYER SWAPS
 	}
 
 	@Override
