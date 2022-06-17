@@ -12,12 +12,17 @@ import simple.api.coords.WorldPoint;
 
 public class NycolasVasilias extends TobBoss {
 	
+	
+//	8355 melee
+//	8356 mage
+//	8357 ranged
+	
 	TOB tob = new TOB();
 
 	WorldArea bossRegion = new WorldArea(new WorldPoint(3289, 4255, 0), new WorldPoint(3302, 4242, 0));
 
 	public NycolasVasilias() {
-		super(new int[] { 0000 }, 13122);
+		super(new int[] { 8356, 8357, 8355 }, 13122);
 		// TODO Auto-generated constructor stub
 	}
 
