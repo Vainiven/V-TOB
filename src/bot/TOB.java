@@ -16,6 +16,7 @@ import Properties.ItemGroups;
 import Properties.Loadout;
 import Properties.PrayerGroups;
 import Properties.PrayerLoadout;
+import bosses.NycolasVasilias;
 import bosses.PestilentBloat;
 import bosses.TheMaidenofSugadinti;
 import bosses.TobBoss;
@@ -45,7 +46,7 @@ public class TOB extends VScript implements GUISettingsProvider, LoopingScript {
 			new InventoryChoice(ItemGroups.SPEC_WEAPONS, 1, 0));
 	private final HashMap<Loadouts, EquipmentLoadout> loadouts = new HashMap<>();
 	private final GUI gui;
-	private TobBoss[] bosses = { new TheMaidenofSugadinti(), new PestilentBloat() };
+	private TobBoss[] bosses = { new TheMaidenofSugadinti(), new PestilentBloat(), new NycolasVasilias()};
 	private TobBoss currentBoss = getCurrentRoom();
 
 	public TOB() {
