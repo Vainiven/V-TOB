@@ -17,8 +17,6 @@ public class NycolasVasilias extends TobBoss {
 //	8355 melee
 //	8356 mage
 //	8357 ranged
-	
-	TOB tob = new TOB();
 
 	WorldArea bossRegion = new WorldArea(new WorldPoint(3289, 4255, 0), new WorldPoint(3302, 4242, 0));
 
@@ -45,7 +43,7 @@ public class NycolasVasilias extends TobBoss {
 		if (ctx.objects.populate().filter(32755).isEmpty() && !ctx.pathing.inArea(bossRegion)) {
 			ctx.pathing.walkPath(path);
 		} else if (!ctx.objects.populate().filter(32755).isEmpty() && !ctx.pathing.inArea(bossRegion)) {
-			tob.handleBarrier();
+			handleBarrier();
 		}
 		return ctx.pathing.inArea(bossRegion);
 	}

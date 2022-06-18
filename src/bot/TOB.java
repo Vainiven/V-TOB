@@ -178,12 +178,6 @@ public class TOB extends VScript implements GUISettingsProvider, LoopingScript {
 		return null;
 	}
 
-	public void handleBarrier() {
-		ctx.objects.nearest().next().interact(SimpleObjectActions.FIRST);
-		ctx.onCondition(() -> ctx.dialogue.dialogueOpen());
-		ctx.keyboard.clickKey(KeyEvent.VK_1);
-	}
-
 	@Override
 	public int loopDuration() {
 		return 200;

@@ -12,8 +12,6 @@ import simple.api.coords.WorldArea;
 import simple.api.coords.WorldPoint;
 
 public class TheMaidenofSugadinti extends TobBoss {
-	
-	TOB tob = new TOB();
 
 	WorldArea bossRegion = new WorldArea(new WorldPoint(3185, 4436, 0), new WorldPoint(3160, 4455, 0));
 
@@ -59,7 +57,7 @@ public class TheMaidenofSugadinti extends TobBoss {
 
 	@Override
 	public Loadouts getLoadout() {
-		return Loadouts.MELEE;
+		return Loadouts.RANGED;
 	}
 
 	@Override
@@ -70,7 +68,7 @@ public class TheMaidenofSugadinti extends TobBoss {
 		if (ctx.objects.populate().filter(32755).isEmpty() && !ctx.pathing.inArea(bossRegion)) {
 			ctx.pathing.walkPath(path);
 		} else if (!ctx.objects.populate().filter(32755).isEmpty() && !ctx.pathing.inArea(bossRegion)) {
-			tob.handleBarrier();
+			handleBarrier();
 		} else if (ctx.npcs.populate().filter(getIds()).filterWithin(5).isEmpty()) {
 			pathing.stepTo(3170, 4446, 0);
 		}

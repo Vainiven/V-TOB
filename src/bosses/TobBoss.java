@@ -1,5 +1,6 @@
 package bosses;
 
+import java.awt.event.KeyEvent;
 import java.util.List;
 
 import ClientContext.Pathing;
@@ -7,6 +8,7 @@ import ClientContext.Players;
 import Properties.PrayerGroups;
 import bot.TOB.Loadouts;
 import simple.api.ClientContext;
+import simple.api.actions.SimpleObjectActions;
 import simple.api.wrappers.SimpleNpc;
 
 public abstract class TobBoss {
@@ -72,6 +74,11 @@ public abstract class TobBoss {
 		return dead;
 	}
 	
+	public void handleBarrier() {
+		ctx.objects.nearest().next().interact(SimpleObjectActions.FIRST);
+		ctx.onCondition(() -> ctx.dialogue.dialogueOpen());
+		ctx.keyboard.clickKey(KeyEvent.VK_1);
+	}
 	
 
 }
