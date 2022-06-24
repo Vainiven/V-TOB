@@ -29,6 +29,8 @@ public class PestilentBloat extends TobBoss {
 	long elapsedTime = System.currentTimeMillis() - startTime;
 	long elapsedSeconds = elapsedTime / 1000;
 
+	long lastOccurence;
+
 	boolean goToSafeSpots;
 
 	public PestilentBloat() {
@@ -37,9 +39,10 @@ public class PestilentBloat extends TobBoss {
 
 	@Override
 	public boolean move() {
-		if (ctx.npcs.populate().filter(getBoss()).next().getAnimation() != 8082 && goToBoss() || goToSafeSpots) {
+
+		if (ctx.npcs.populate().filter(getBoss()).next().getAnimation() != 8082 && goToBoss() || lastOccurence == 0
+				|| System.currentTimeMillis() - lastOccurence >= 11000) {
 			WorldPoint bossLocation = ctx.npcs.populate().filter(getIds()).next().getLocation();
-			elapsedTime = 0;
 			if (bossLocation.within(northRegion)) {
 				ctx.pathing.step(northTile);
 			} else if (bossLocation.within(eastRegion)) {
@@ -50,11 +53,9 @@ public class PestilentBloat extends TobBoss {
 				ctx.pathing.step(southTile);
 			}
 			return true;
-		} else if (elapsedSeconds < 11) {
-			System.out.println("Current elapsedSeconds = " + elapsedSeconds);
+		} else if (ctx.npcs.populate().filter(getBoss()).next().getAnimation() == 8082) {
+			lastOccurence = System.currentTimeMillis();
 			return false;
-		} else {
-			goToSafeSpots = true;
 		}
 		return false;
 	}
