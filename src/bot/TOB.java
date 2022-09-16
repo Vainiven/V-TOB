@@ -127,7 +127,7 @@ public class TOB extends VScript implements GUISettingsProvider, LoopingScript {
 			} else {
 				// Room fight
 				if (currentBoss.getBoss() != null) {
-					inventory.equip(loadouts.get(currentBoss.getLoadout()), false);
+					inventory.equip(loadouts.get(currentBoss.getLoadout()));
 					prayers.usePrayers(currentBoss.getPrayers().toArray(new PrayerGroups[0]), prayerLoadout, false);
 					inventory.dropEmptyVials();
 					inventory.usePotions();
