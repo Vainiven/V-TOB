@@ -114,7 +114,7 @@ public class TOB extends VScript implements GUISettingsProvider, LoopingScript {
 					if (!players.useHealingBox() && !bank.bank(inventoryLoadout, loadouts.get(Loadouts.MELEE),
 							loadouts.get(Loadouts.RANGED), loadouts.get(Loadouts.MAGIC))) {
 						if (players.inParty("ToB Party (")) {
-							if (players.getPartyLeaderName()) {
+							if (players.isPartyLeader()) {
 								handleToBPartyDialogue();
 							}
 						} else {
