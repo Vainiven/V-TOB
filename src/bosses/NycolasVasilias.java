@@ -4,9 +4,9 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import Properties.PrayerGroups;
 import bot.TOB;
 import bot.TOB.Loadouts;
+import loadouts.choices.PrayerGroups;
 import simple.api.actions.SimpleObjectActions;
 import simple.api.coords.WorldArea;
 import simple.api.coords.WorldPoint;

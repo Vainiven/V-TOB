@@ -5,8 +5,8 @@ import java.util.List;
 
 import ClientContext.Pathing;
 import ClientContext.Players;
-import Properties.PrayerGroups;
 import bot.TOB.Loadouts;
+import loadouts.choices.PrayerGroups;
 import simple.api.ClientContext;
 import simple.api.actions.SimpleObjectActions;
 import simple.api.wrappers.SimpleNpc;
