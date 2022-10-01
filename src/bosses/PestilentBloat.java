@@ -4,7 +4,6 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import bot.TOB;
 import bot.TOB.Loadouts;
 import loadouts.choices.PrayerGroups;
 import simple.api.actions.SimpleObjectActions;

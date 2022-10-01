@@ -3,10 +3,7 @@ package bot;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import Bot.VScript;
-import ClientContext.Players;
 import GUI.GUI;
 import GUI.GUISettingsProvider;
 import bosses.NycolasVasilias;
@@ -22,11 +19,9 @@ import loadouts.choices.ItemGroups;
 import loadouts.choices.PrayerGroups;
 import paint.PaintProvider;
 import simple.api.actions.SimpleNpcActions;
-import simple.api.actions.SimpleObjectActions;
 import simple.api.script.Category;
 import simple.api.script.LoopingScript;
 import simple.api.script.ScriptManifest;
-import simple.api.wrappers.SimpleNpc;
 
 @ScriptManifest(author = "Vainiven & FVZ", category = Category.MONEYMAKING, description = "Dikke lul drie bier script", discord = "Vainven#6986", name = "V-TOB", servers = {
 		"Xeros" }, version = "0.1")
