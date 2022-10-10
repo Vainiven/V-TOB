@@ -69,7 +69,7 @@ public class TheMaidenofSugadinti extends TobBoss {
 		} else if (!ctx.objects.populate().filter(32755).isEmpty() && !ctx.pathing.inArea(bossRegion)) {
 			handleBarrier();
 		} else if (ctx.npcs.populate().filter(getIds()).filterWithin(5).isEmpty()) {
-			pathing.stepTo(3170, 4446, 0);
+			pathing.goTo(3170, 4446, 0);
 		}
 		return ctx.pathing.inArea(new WorldArea(new WorldPoint(3175, 4457, 0), new WorldPoint(3160, 4435, 0)));
 	}
