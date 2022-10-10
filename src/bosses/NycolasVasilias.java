@@ -3,8 +3,8 @@ package bosses;
 import java.util.ArrayList;
 import java.util.List;
 
+import GUI.loadouts.choices.PrayerGroups;
 import bot.TOB.Loadouts;
-import loadouts.choices.PrayerGroups;
 import simple.api.coords.WorldArea;
 import simple.api.coords.WorldPoint;
 
