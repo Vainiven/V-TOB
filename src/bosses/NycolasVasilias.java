@@ -9,8 +9,7 @@ import simple.api.coords.WorldArea;
 import simple.api.coords.WorldPoint;
 
 public class NycolasVasilias extends TobBoss {
-	
-	
+
 //	8355 melee
 //	8356 mage
 //	8357 ranged
@@ -50,7 +49,7 @@ public class NycolasVasilias extends TobBoss {
 		ArrayList<PrayerGroups> prayers = new ArrayList<>();
 		prayers.add(PrayerGroups.MELEE_PRAYER);
 		return prayers;
-		//TODO ADD PRAYER SWAPS
+		// TODO ADD PRAYER SWAPS
 	}
 
 	@Override

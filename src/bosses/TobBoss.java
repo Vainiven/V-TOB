@@ -69,16 +69,15 @@ public abstract class TobBoss {
 		}
 		return currentBoss;
 	}
-	
+
 	public boolean isDead() {
 		return dead;
 	}
-	
+
 	public void handleBarrier() {
 		ctx.objects.nearest().next().interact(SimpleObjectActions.FIRST);
 		ctx.onCondition(() -> ctx.dialogue.dialogueOpen());
 		ctx.keyboard.clickKey(KeyEvent.VK_1);
 	}
-	
 
 }

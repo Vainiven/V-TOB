@@ -41,7 +41,7 @@ public class TOB extends VScript implements GUISettingsProvider, LoopingScript {
 			new InventoryChoice(ItemGroups.SPEC_WEAPONS, 1, 0));
 	private final HashMap<Loadouts, EquipmentLoadout> loadouts = new HashMap<>();
 	private final GUI gui;
-	private TobBoss[] bosses = { new TheMaidenofSugadinti(), new PestilentBloat(), new NycolasVasilias()};
+	private TobBoss[] bosses = { new TheMaidenofSugadinti(), new PestilentBloat(), new NycolasVasilias() };
 	private TobBoss currentBoss = getCurrentRoom();
 
 	public TOB() {

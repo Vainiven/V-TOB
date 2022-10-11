@@ -18,8 +18,8 @@ public class TheMaidenofSugadinti extends TobBoss {
 		super(new int[] { 8360 }, 12869, 12613);
 	}
 
-	//TODO ADD STEP TO CLOSEST TILE TO BOSS
-	
+	// TODO ADD STEP TO CLOSEST TILE TO BOSS
+
 	@Override
 	public boolean move() {
 		if (pathing.checkFreeTiles(1579)) {
