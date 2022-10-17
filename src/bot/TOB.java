@@ -41,7 +41,7 @@ public class TOB extends VScript implements GUISettingsProvider, LoopingScript {
 			new InventoryChoice(ItemGroups.SPEC_WEAPONS, 1, 0));
 	private final HashMap<Loadouts, EquipmentLoadout> loadouts = new HashMap<>();
 	private final GUI gui;
-	private TobBoss[] bosses = { new TheMaidenofSugadinti(), new PestilentBloat(), new NycolasVasilias() };
+	private final TobBoss[] bosses = { new TheMaidenofSugadinti(), new PestilentBloat(), new NycolasVasilias() };
 	private TobBoss currentBoss = getCurrentRoom();
 
 	public TOB() {
@@ -119,28 +119,25 @@ public class TOB extends VScript implements GUISettingsProvider, LoopingScript {
 				} else {
 					ctx.teleporter.teleportStringPath("Minigames", "Theatre of Blood");
 				}
-			} else {
-				// Room fight
-				if (currentBoss.getBoss() != null) {
-					inventory.equip(loadouts.get(currentBoss.getLoadout()));
-					prayers.usePrayers(currentBoss.getPrayers().toArray(new PrayerGroups[0]), prayerLoadout, false);
-					inventory.dropEmptyVials();
-					inventory.usePotions();
-					inventory.eat();
-					if (!currentBoss.move() && !currentBoss.getBoss().equals(ctx.players.getLocal().getInteracting())) {
-						currentBoss.getBoss().interact(SimpleNpcActions.FIRST);
-					}
-
-					// When boss is dead
-				} else if (currentBoss.isDead()) {
-					if (!currentBoss.getToNextRoom()) {
-						prayers.disablePrayers(currentBoss.getPrayers().toArray(new PrayerGroups[0]), prayerLoadout,
-								false);
-						currentBoss = getCurrentRoom();
-					}
-				} else {
-					currentBoss.goToBoss();
+			} else // Room fight
+			if (currentBoss.getBoss() != null) {
+				inventory.equip(loadouts.get(currentBoss.getLoadout()));
+				prayers.usePrayers(currentBoss.getPrayers().toArray(new PrayerGroups[0]), prayerLoadout, false);
+				inventory.dropEmptyVials();
+				inventory.usePotions();
+				inventory.eat();
+				if (!currentBoss.move() && !currentBoss.getBoss().equals(ctx.players.getLocal().getInteracting())) {
+					currentBoss.getBoss().interact(SimpleNpcActions.FIRST);
 				}
+
+				// When boss is dead
+			} else if (currentBoss.isDead()) {
+				if (!currentBoss.getToNextRoom()) {
+					prayers.disablePrayers(currentBoss.getPrayers().toArray(new PrayerGroups[0]), prayerLoadout, false);
+					currentBoss = getCurrentRoom();
+				}
+			} else {
+				currentBoss.goToBoss();
 			}
 		}
 	}

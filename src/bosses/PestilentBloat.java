@@ -52,9 +52,9 @@ public class PestilentBloat extends TobBoss {
 				ctx.pathing.step(southTile);
 			}
 			return true;
-		} else if (ctx.npcs.populate().filter(getBoss()).next().getAnimation() == 8082) {
+		}
+		if (ctx.npcs.populate().filter(getBoss()).next().getAnimation() == 8082) {
 			lastOccurence = System.currentTimeMillis();
-			return false;
 		}
 		return false;
 	}

@@ -37,19 +37,19 @@ public abstract class TobBoss {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return True when needing to move or moving
 	 */
 	public abstract boolean move();
 
 	/**
-	 * 
+	 *
 	 * @return True if getting to next room. False if the next room has been reached
 	 */
 	public abstract boolean getToNextRoom();
 
 	/**
-	 * 
+	 *
 	 * @return True if getting to next boss. False if the next boss has been reached
 	 */
 	public abstract boolean goToBoss();
