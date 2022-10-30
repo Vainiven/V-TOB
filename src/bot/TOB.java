@@ -19,7 +19,6 @@ import bosses.NycolasVasilias;
 import bosses.PestilentBloat;
 import bosses.TheMaidenofSugadinti;
 import bosses.TobBoss;
-import paint.PaintProvider;
 import simple.api.actions.SimpleNpcActions;
 import simple.api.script.Category;
 import simple.api.script.LoopingScript;
@@ -96,11 +95,6 @@ public class TOB extends VScript implements GUISettingsProvider, LoopingScript {
 	@Override
 	public List<Loadout<?, ?, ?>> getLoadouts() {
 		return Arrays.asList(prayerLoadout, inventoryLoadout);
-	}
-
-	@Override
-	protected PaintProvider[] getPaintProviders() {
-		return new PaintProvider[] {};
 	}
 
 	@Override
