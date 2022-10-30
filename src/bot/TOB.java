@@ -1,7 +1,9 @@
 package bot;
 
 import java.awt.event.KeyEvent;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 import Bot.VScript;
 import GUI.GUI;
@@ -46,14 +48,14 @@ public class TOB extends VScript implements GUISettingsProvider, LoopingScript {
 
 	public TOB() {
 		super(null);
-		EquipmentLoadout meleeLoadout = new EquipmentLoadout(ItemGroups.getEquipment());
-		EquipmentLoadout rangedLoadout = new EquipmentLoadout(ItemGroups.getEquipment());
-		EquipmentLoadout magicLoadout = new EquipmentLoadout(ItemGroups.getEquipment());
+		final EquipmentLoadout meleeLoadout = new EquipmentLoadout(ItemGroups.equipment);
+		final EquipmentLoadout rangedLoadout = new EquipmentLoadout(ItemGroups.equipment);
+		final EquipmentLoadout magicLoadout = new EquipmentLoadout(ItemGroups.equipment);
 		gui = new GUI(this, new GUISettingsProvider() {
 
 			@Override
-			public Loadout<?, ?, ?>[] getLoadouts() {
-				return new Loadout<?, ?, ?>[] { meleeLoadout };
+			public List<Loadout<?, ?, ?>> getLoadouts() {
+				return Arrays.asList(meleeLoadout);
 			}
 
 			@Override
@@ -64,8 +66,8 @@ public class TOB extends VScript implements GUISettingsProvider, LoopingScript {
 		}, new GUISettingsProvider() {
 
 			@Override
-			public Loadout<?, ?, ?>[] getLoadouts() {
-				return new Loadout<?, ?, ?>[] { magicLoadout };
+			public List<Loadout<?, ?, ?>> getLoadouts() {
+				return Arrays.asList(magicLoadout);
 			}
 
 			@Override
@@ -76,8 +78,8 @@ public class TOB extends VScript implements GUISettingsProvider, LoopingScript {
 		}, new GUISettingsProvider() {
 
 			@Override
-			public Loadout<?, ?, ?>[] getLoadouts() {
-				return new Loadout<?, ?, ?>[] { rangedLoadout };
+			public List<Loadout<?, ?, ?>> getLoadouts() {
+				return Arrays.asList(rangedLoadout);
 			}
 
 			@Override
@@ -92,8 +94,8 @@ public class TOB extends VScript implements GUISettingsProvider, LoopingScript {
 	}
 
 	@Override
-	public Loadout<?, ?, ?>[] getLoadouts() {
-		return new Loadout<?, ?, ?>[] { prayerLoadout, inventoryLoadout };
+	public List<Loadout<?, ?, ?>> getLoadouts() {
+		return Arrays.asList(prayerLoadout, inventoryLoadout);
 	}
 
 	@Override
@@ -143,8 +145,8 @@ public class TOB extends VScript implements GUISettingsProvider, LoopingScript {
 	}
 
 	public void handleToBPartyDialogue() {
-		String widgetText = ctx.widgets.populate().filter(365).next().getText();
-		int widgetId = ctx.widgets.getBackDialogId();
+		final String widgetText = ctx.widgets.populate().filter(365).next().getText();
+		final int widgetId = ctx.widgets.getBackDialogId();
 
 		if (!ctx.dialogue.dialogueOpen() && !ctx.objects.populate().filter(32653).isEmpty()) {
 			ctx.objects.nearest().next().interact(502);
@@ -163,7 +165,7 @@ public class TOB extends VScript implements GUISettingsProvider, LoopingScript {
 	}
 
 	public TobBoss getCurrentRoom() {
-		for (TobBoss boss : bosses) {
+		for (final TobBoss boss : bosses) {
 			if (players.inRegion(boss.getRegions())) {
 				return boss;
 			}
