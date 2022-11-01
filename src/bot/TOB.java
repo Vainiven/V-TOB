@@ -10,7 +10,6 @@ import GUI.GUI;
 import GUI.guicomponents.GUISettingsProvider;
 import GUI.loadouts.EquipmentLoadout;
 import GUI.loadouts.InventoryLoadout;
-import GUI.loadouts.Loadout;
 import GUI.loadouts.PrayerLoadout;
 import GUI.loadouts.choice.InventoryChoice;
 import GUI.loadouts.choices.ItemGroups;
@@ -19,6 +18,7 @@ import bosses.NycolasVasilias;
 import bosses.PestilentBloat;
 import bosses.TheMaidenofSugadinti;
 import bosses.TobBoss;
+import interfaces.Drawable;
 import simple.api.actions.SimpleNpcActions;
 import simple.api.script.Category;
 import simple.api.script.LoopingScript;
@@ -53,7 +53,7 @@ public class TOB extends VScript implements GUISettingsProvider, LoopingScript {
 		gui = new GUI(this, new GUISettingsProvider() {
 
 			@Override
-			public List<Loadout<?, ?, ?>> getLoadouts() {
+			public List<Drawable> getLoadouts() {
 				return Arrays.asList(meleeLoadout);
 			}
 
@@ -65,7 +65,7 @@ public class TOB extends VScript implements GUISettingsProvider, LoopingScript {
 		}, new GUISettingsProvider() {
 
 			@Override
-			public List<Loadout<?, ?, ?>> getLoadouts() {
+			public List<Drawable> getLoadouts() {
 				return Arrays.asList(magicLoadout);
 			}
 
@@ -77,7 +77,7 @@ public class TOB extends VScript implements GUISettingsProvider, LoopingScript {
 		}, new GUISettingsProvider() {
 
 			@Override
-			public List<Loadout<?, ?, ?>> getLoadouts() {
+			public List<Drawable> getLoadouts() {
 				return Arrays.asList(rangedLoadout);
 			}
 
@@ -93,7 +93,7 @@ public class TOB extends VScript implements GUISettingsProvider, LoopingScript {
 	}
 
 	@Override
-	public List<Loadout<?, ?, ?>> getLoadouts() {
+	public List<Drawable> getLoadouts() {
 		return Arrays.asList(prayerLoadout, inventoryLoadout);
 	}
 
