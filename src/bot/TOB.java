@@ -47,9 +47,9 @@ public class TOB extends VScript implements GUISettingsProvider, LoopingScript {
 
 	public TOB() {
 		super(null);
-		final EquipmentLoadout meleeLoadout = new EquipmentLoadout(ItemGroups.equipment);
-		final EquipmentLoadout rangedLoadout = new EquipmentLoadout(ItemGroups.equipment);
-		final EquipmentLoadout magicLoadout = new EquipmentLoadout(ItemGroups.equipment);
+		final EquipmentLoadout meleeLoadout = new EquipmentLoadout();
+		final EquipmentLoadout rangedLoadout = new EquipmentLoadout();
+		final EquipmentLoadout magicLoadout = new EquipmentLoadout();
 		gui = new GUI(this, new GUISettingsProvider() {
 
 			@Override
