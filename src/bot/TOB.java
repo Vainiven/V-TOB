@@ -2,13 +2,13 @@ package bot;
 
 import java.awt.event.KeyEvent;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 import Bot.VScript;
 import GUI.GUI;
 import GUI.guicomponents.GUISettingsProvider;
 import GUI.loadouts.EquipmentLoadout;
+import GUI.loadouts.EquipmentLoadout.Gears;
 import GUI.loadouts.InventoryLoadout;
 import GUI.loadouts.PrayerLoadout;
 import GUI.loadouts.choice.InventoryChoice;
@@ -29,10 +29,6 @@ import simple.api.script.ScriptManifest;
 
 public class TOB extends VScript implements GUISettingsProvider, LoopingScript {
 
-	public enum Loadouts {
-		MELEE, RANGED, MAGIC
-	}
-
 	private final PrayerLoadout prayerLoadout = new PrayerLoadout(PrayerGroups.MELEE_PRAYER, PrayerGroups.RANGED_PRAYER,
 			PrayerGroups.MAGIC_PRAYER);
 	private final InventoryLoadout inventoryLoadout = new InventoryLoadout(
@@ -40,21 +36,18 @@ public class TOB extends VScript implements GUISettingsProvider, LoopingScript {
 			new InventoryChoice(ItemGroups.MAGIC_POTION, 1, 0), new InventoryChoice(ItemGroups.FOOD, 19, 4),
 			new InventoryChoice(ItemGroups.PRAYER_POTION, 5, 0), new InventoryChoice(ItemGroups.PET, 1, 0),
 			new InventoryChoice(ItemGroups.SPEC_WEAPONS, 1, 0));
-	private final HashMap<Loadouts, EquipmentLoadout> loadouts = new HashMap<>();
+	final EquipmentLoadout loadouts = new EquipmentLoadout(Gears.MELEE, Gears.RANGED, Gears.MAGIC);
 	private final GUI gui;
 	private final TobBoss[] bosses = { new TheMaidenofSugadinti(), new PestilentBloat(), new NycolasVasilias() };
 	private TobBoss currentBoss = getCurrentRoom();
 
 	public TOB() {
 		super(null);
-		final EquipmentLoadout meleeLoadout = new EquipmentLoadout();
-		final EquipmentLoadout rangedLoadout = new EquipmentLoadout();
-		final EquipmentLoadout magicLoadout = new EquipmentLoadout();
 		gui = new GUI(this, new GUISettingsProvider() {
 
 			@Override
 			public List<Drawable> getLoadouts() {
-				return Arrays.asList(meleeLoadout);
+				return Arrays.asList(loadouts.getGear(Gears.MELEE));
 			}
 
 			@Override
@@ -66,7 +59,7 @@ public class TOB extends VScript implements GUISettingsProvider, LoopingScript {
 
 			@Override
 			public List<Drawable> getLoadouts() {
-				return Arrays.asList(magicLoadout);
+				return Arrays.asList(loadouts.getGear(Gears.MAGIC));
 			}
 
 			@Override
@@ -78,7 +71,7 @@ public class TOB extends VScript implements GUISettingsProvider, LoopingScript {
 
 			@Override
 			public List<Drawable> getLoadouts() {
-				return Arrays.asList(rangedLoadout);
+				return Arrays.asList(loadouts.getGear(Gears.RANGED));
 			}
 
 			@Override
@@ -86,9 +79,6 @@ public class TOB extends VScript implements GUISettingsProvider, LoopingScript {
 				return "Ranged Loadout";
 			}
 		});
-		loadouts.put(Loadouts.MELEE, meleeLoadout);
-		loadouts.put(Loadouts.MAGIC, magicLoadout);
-		loadouts.put(Loadouts.RANGED, rangedLoadout);
 		bank.forceBank();
 	}
 
@@ -102,8 +92,7 @@ public class TOB extends VScript implements GUISettingsProvider, LoopingScript {
 		if (!gui.isVisible()) {
 			if (currentBoss == null) {
 				if (players.isAtTOB()) {
-					if (!players.useHealingBox() && !bank.bank(inventoryLoadout, loadouts.get(Loadouts.MELEE),
-							loadouts.get(Loadouts.RANGED), loadouts.get(Loadouts.MAGIC))) {
+					if (!players.useHealingBox() && !bank.bank(inventoryLoadout, loadouts)) {
 						if (players.inParty("ToB Party (")) {
 							if (players.isPartyLeader()) {
 								handleToBPartyDialogue();
@@ -117,7 +106,7 @@ public class TOB extends VScript implements GUISettingsProvider, LoopingScript {
 				}
 			} else // Room fight
 			if (currentBoss.getBoss() != null) {
-				inventory.equip(loadouts.get(currentBoss.getLoadout()));
+				inventory.equip(loadouts.getGear(currentBoss.getLoadout()));
 				prayers.usePrayers(currentBoss.getPrayers().toArray(new PrayerGroups[0]), prayerLoadout, false);
 				inventory.dropEmptyVials();
 				inventory.usePotions();

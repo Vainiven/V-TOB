@@ -4,8 +4,8 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import GUI.loadouts.EquipmentLoadout.Gears;
 import GUI.loadouts.choices.PrayerGroups;
-import bot.TOB.Loadouts;
 import simple.api.actions.SimpleObjectActions;
 import simple.api.coords.WorldArea;
 import simple.api.coords.WorldPoint;
@@ -30,7 +30,7 @@ public class TheMaidenofSugadinti extends TobBoss {
 
 	@Override
 	public boolean getToNextRoom() {
-		WorldPoint[] path = { new WorldPoint(3190, 4446, 0), new WorldPoint(3191, 4440, 0),
+		final WorldPoint[] path = { new WorldPoint(3190, 4446, 0), new WorldPoint(3191, 4440, 0),
 				new WorldPoint(3191, 4434, 0), new WorldPoint(3185, 4431, 0), new WorldPoint(3177, 4431, 0),
 				new WorldPoint(3176, 4424, 0) };
 
@@ -48,20 +48,20 @@ public class TheMaidenofSugadinti extends TobBoss {
 
 	@Override
 	public List<PrayerGroups> getPrayers() {
-		ArrayList<PrayerGroups> prayers = new ArrayList<>();
+		final ArrayList<PrayerGroups> prayers = new ArrayList<>();
 		prayers.add(PrayerGroups.MELEE_PRAYER);
 		prayers.add(PrayerGroups.PROTECT_FROM_MAGIC);
 		return prayers;
 	}
 
 	@Override
-	public Loadouts getLoadout() {
-		return Loadouts.RANGED;
+	public Gears getLoadout() {
+		return Gears.RANGED;
 	}
 
 	@Override
 	public boolean goToBoss() {
-		WorldPoint[] path = { new WorldPoint(3217, 4452, 0), new WorldPoint(3213, 4449, 0),
+		final WorldPoint[] path = { new WorldPoint(3217, 4452, 0), new WorldPoint(3213, 4449, 0),
 				new WorldPoint(3208, 4446, 0), new WorldPoint(3202, 4446, 0), new WorldPoint(3197, 4446, 0),
 				new WorldPoint(3193, 4446, 0), new WorldPoint(3189, 4446, 0) };
 		if (ctx.objects.populate().filter(32755).isEmpty() && !ctx.pathing.inArea(bossRegion)) {

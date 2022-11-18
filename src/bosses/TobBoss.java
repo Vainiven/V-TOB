@@ -5,8 +5,8 @@ import java.util.List;
 
 import ClientContext.Pathing;
 import ClientContext.Players;
+import GUI.loadouts.EquipmentLoadout.Gears;
 import GUI.loadouts.choices.PrayerGroups;
-import bot.TOB.Loadouts;
 import simple.api.ClientContext;
 import simple.api.actions.SimpleObjectActions;
 import simple.api.wrappers.SimpleNpc;
@@ -56,7 +56,7 @@ public abstract class TobBoss {
 
 	public abstract List<PrayerGroups> getPrayers();
 
-	public abstract Loadouts getLoadout();
+	public abstract Gears getLoadout();
 
 	public SimpleNpc getBoss() {
 		if (currentBoss == null) {

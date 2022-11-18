@@ -3,8 +3,8 @@ package bosses;
 import java.util.ArrayList;
 import java.util.List;
 
+import GUI.loadouts.EquipmentLoadout.Gears;
 import GUI.loadouts.choices.PrayerGroups;
-import bot.TOB.Loadouts;
 import simple.api.coords.WorldArea;
 import simple.api.coords.WorldPoint;
 
@@ -33,7 +33,7 @@ public class NycolasVasilias extends TobBoss {
 
 	@Override
 	public boolean goToBoss() {
-		WorldPoint[] path = { new WorldPoint(3295, 4276, 0), new WorldPoint(3295, 4269, 0),
+		final WorldPoint[] path = { new WorldPoint(3295, 4276, 0), new WorldPoint(3295, 4269, 0),
 				new WorldPoint(3295, 4261, 0) };
 
 		if (ctx.objects.populate().filter(32755).isEmpty() && !ctx.pathing.inArea(bossRegion)) {
@@ -46,14 +46,14 @@ public class NycolasVasilias extends TobBoss {
 
 	@Override
 	public List<PrayerGroups> getPrayers() {
-		ArrayList<PrayerGroups> prayers = new ArrayList<>();
+		final ArrayList<PrayerGroups> prayers = new ArrayList<>();
 		prayers.add(PrayerGroups.MELEE_PRAYER);
 		return prayers;
 		// TODO ADD PRAYER SWAPS
 	}
 
 	@Override
-	public Loadouts getLoadout() {
+	public Gears getLoadout() {
 		// TODO Auto-generated method stub
 		return null;
 	}
